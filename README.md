@@ -46,11 +46,26 @@ Dense(10, softmax)
 
 ## Results
 
+Measured on a stratified 6,000-image held-out validation split (the notebook's
+`"full"` run, 3 models × 30 epochs, using the `keras.datasets.mnist` fallback):
+
 | Solution | Validation accuracy |
 |----------|---------------------|
 | Original (buggy plain CNN) | ~97.7% |
-| Single improved CNN (BN + augmentation) | ~99.4–99.5% |
-| 3-CNN ensemble | ~99.6–99.7% |
+| Single improved CNN (BN + augmentation) | 99.50–99.57% (per model) |
+| **3-CNN ensemble** | **99.55%** |
+
+The individual models reach 99.50%, 99.52%, and 99.57%; averaging their softmax
+outputs gives a stable 99.55%. On the full Kaggle training set with more epochs or
+additional ensemble members (and optionally test-time augmentation), this approach
+reaches ~99.7% — see *Further improvements* below.
+
+## Further improvements
+
+- Train on the real Kaggle `data/train.csv` (42k labelled images) and submit to the
+  leaderboard.
+- Add more ensemble members (5–15 CNNs) and/or test-time augmentation (TTA).
+- Try a cyclic / cosine learning-rate schedule instead of `ReduceLROnPlateau`.
 
 ## How to run
 
